@@ -14,11 +14,11 @@ function startGame() {
     //screen.context.font = this.width + " " + this.height;
     //screen.context.fillStyle = "green";
     //screen.context.fillText("Hello Wold", 15, 55);
-    for (let index = 0; index < 4; index++) {
-        if(index === 3)
+    for (let index = 0; index < 25; index++) {
+        if(index === 24)
             entities[index] = new Entity(10, 15, true);
         else
-            entities[index] = new Entity(2500*Math.random() + 500, 15, false);
+            entities[index] = new Entity(500 + index* 600 + 400*Math.random(), 15, false);
     }
     for (let index = 0; index < 10; index++)
     {
@@ -58,6 +58,8 @@ function update() {
     }
     for (let index = 0; index < entities.length; index++){
         entities[index].Update();
+        if(player.Collide(entities[index]))
+            player.isCaged = true;
     }
     if(!player.isCaged){
         cam_x_timer += 1.55;
@@ -127,6 +129,7 @@ class Entity
         this.img_flip = this.img;
         this.img_cage = this.img;
         this.img_lazer = this.img;
+        this.lazerActivated = false;
         this.lazerTimer = 0;
         this.col = "rgb(200,20,20)";//"#ff0000",
         this.timer =  0;
@@ -141,14 +144,22 @@ class Entity
             this.img_lazer = new Image();
             this.img_lazer.src = "img\\lazer.png";
         }
-        else
+        else{
             this.img.src = "img\\tim.png";
+            this.img_cage = new Image();
+            this.img_cage.src = "img\\tim_lazer.png";
+
+        }
     }
     Update() 
     {
-        if(!this.spawned && this.x > screen.canvas.width)
+        if(!this.spawned && this.x > cam_x + screen.canvas.width)
             return;
         else this.spawned = true;
+        if(!this.isPlayer && this.x <= cam_x){
+            this.spawned = false;
+            return;
+        }
 
         this.x += this.vx;
         this.y += this.vy;
@@ -171,10 +182,12 @@ class Entity
             this.vy = Direction(keypresses["ArrowDown"], keypresses["ArrowUp"], 2);
             this.vx = Direction(keypresses["ArrowRight"], keypresses["ArrowLeft"], 4);
             //Lazor
-            if(keypresses["x"] && !this.isJumping){
+            if(keypresses["x"] && !this.isJumping && this.vx >= 0){
                 screen.context.drawImage(this.img_lazer, Math.floor(this.lazerTimer)*32, 0, 31.5, 32, this.x - cam_x + this.w, this.y, this.w, this.h);
                 this.lazerTimer = (this.lazerTimer + 0.44) % 3 ;
+                this.lazerActivated = true;
             }
+            else this.lazerActivated = false;
 
             //Jump
             if(keypresses["z"] && this.jumpTimer <= 0){
@@ -190,21 +203,21 @@ class Entity
                 this.jumpTimer = 0.25;
                 this.isJumping = false;
             }
-            if(this.isCaged)
-                this.vx = this.vy = 0;
         }
         else if(this.timer > 1.5 || this.timer == 0)
             this.vy = Math.random()*4 - 2;
 
         if(this.isJumping)
             this.timer += 0.1;
-        else if(this.vx != 0 || this.vy != 0)
+        else if(this.vx != 0 || this.vy != 0 || this.isCaged)
             this.timer += 0.2;
         else this.timer = 0;
         this.timer %= 3;
 
-        if(this.isCaged)
+        if(this.isCaged){
+            this.vx = this.vy = 0;
             screen.context.drawImage(this.img_cage, Math.floor(this.timer)*32, 0, 31.5, 32, this.x - cam_x, this.y, this.w, this.h);
+        }
         else if(this.isJumping)
         {
             let offset = 1.25* ( this.jumpTimer >= -0.5?  this.h * this.jumpTimer : this.h * (-1 - this.jumpTimer));
@@ -215,6 +228,25 @@ class Entity
         else
             screen.context.drawImage(this.img, Math.floor(this.timer)*32, 0, 31.5, 32, this.x - cam_x, this.y, this.w, this.h);
 
+    }
+    Collide(enemy)
+    {
+        if(!this.spawned)
+            return false;
+        if(enemy.isPlayer)
+            return false;
+        
+        if(this.lazerActivated  &&
+            enemy.x + enemy.w * 0.75 > this.x + this.w && enemy.x + enemy.w * 0.75 < this.x + this.w *2 && 
+            enemy.y + enemy.h * 0.25 > this.y && enemy.y + enemy.h * 0.75 < this.y + this.h  )
+            enemy.isCaged = true;
+
+        if(!enemy.isCaged && 
+            enemy.x + enemy.w * 0.25 > this.x && enemy.x + enemy.w * 0.75 < this.x + this.w && 
+            enemy.y + enemy.h * 0.25 > this.y && enemy.y + enemy.h * 0.75 < this.y + this.h  )
+            return true;
+        
+        return false;
     }
 
 }
