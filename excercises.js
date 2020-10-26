@@ -15,7 +15,7 @@ function UpdateTime()
 
 
 let replying;
-let counterReplies = ["whats up dog?", "Soup my dude"];
+let counterReplies = ["whats up dog?", "Soup my dude", "are you there?", "hello?"];
 let chatAsk = setInterval(ChatBotAsk, 8888);
 function ChatBot()
 {
