@@ -28,6 +28,7 @@ function ChatBot()
     clearInterval(chatAsk);
     clearTimeout(replying);
     replying = setTimeout(ChatBotReply, Math.random() * 1000 + 1000, input);
+    chatAsk = setInterval(ChatBotAsk, Math.random() * 2000 + 7888);
 
     CutOffHistory();
 }
