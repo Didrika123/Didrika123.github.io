@@ -1,0 +1,245 @@
+:root {
+    --content-bg-color: lemonchiffon;
+    --content-border: 2px solid black;
+}
+
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+a{
+    text-decoration: none;
+    color:black;
+}
+ul, ol{
+    list-style: none;
+}
+p, h3{
+    padding: 0.2rem;
+    margin: 0.2rem;
+}
+
+/* Utility */
+.textboldieblue{
+    color: rgb(102, 184, 211);
+    font-weight: bold;
+}
+
+/* HEADER STUFF */
+
+header{
+    display: flex;
+    background: darkorange;
+    grid-column: 1 / -1; /* Span header over entire row*/
+    overflow: hidden;
+    border: var(--content-border);
+}
+header h1, header a{
+    line-height: 4rem;
+    float: left;
+    padding-right: 2rem;
+}
+header h1{
+    white-space: nowrap;
+}
+header a{
+    background: dodgerblue;
+    font-size: 2rem;
+    border-bottom: 0;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    border: var(--content-border);
+}
+header img{
+    
+    /*height: 100%; If img outside h1 you need this*/
+    vertical-align: middle;
+    margin: 0 0.5rem 0 0.5rem;
+}
+a#top-right-link{
+    background:cornflowerblue;
+    float: right;
+}
+header a:hover, a#top-right-link:hover{
+    color:red;
+    background: greenyellow;
+}
+header nav{
+    flex-grow: 1; /*Make nav fill remaining space of parent*/
+}
+
+
+/* BODY STUFF */
+body {
+    margin: auto;
+    max-width: 1024px;
+}
+.grid {
+    display: grid; 
+    grid-template-areas:  
+    "header 	header 		header"
+    "main 	    main 	    aside"
+    "footer 	footer 		footer";
+    
+    border: 2px solid black;
+}
+
+/* MAIN STUFF*/
+main{
+    grid-area: main;
+    border: var(--content-border);
+    background-color: rgb(236, 224, 113);
+    padding: 2rem;
+}
+main h2, main .subtext, article, aside ul{
+    padding: 2rem;
+    display: inline-block;
+    border: var(--content-border);
+    background-color: var(--content-bg-color);
+}
+main .subtext, main h2{
+    margin: 2%;
+}
+main .subtext{
+    min-height: 10rem;
+}
+main article{
+    display: inline-block;
+    width: 46%;
+    margin: 2%;
+    height: 25rem;
+    overflow: hidden;
+    vertical-align: top;
+}
+main article img {
+    display: block;
+    width: 100%;
+    margin: 1rem auto; 
+}
+
+/* ASIDE STUFF */
+aside{
+    grid-area: aside;
+    background-color: rgb(157, 207, 157);
+    border: var(--content-border);
+    text-align: center;
+}
+aside h2{
+    padding: 0.5rem;
+}
+aside ul li ol{
+    margin-bottom:  1rem;
+}
+aside ul li ol li:nth-child(even){
+    background: rgb(195, 240, 255);
+}
+aside ul li ol li:nth-child(odd){
+    background: rgb(230, 224, 255);
+}
+
+/* FOOTER STUFF */
+footer{
+    grid-area: footer;
+    background-color: mediumslateblue;
+    border: var(--content-border);
+    height: 4rem;
+    text-align: center;
+    font-size: 1.5rem;
+}
+footer span{
+    padding: 1rem;
+    display: block;
+}
+
+/* LOGIN STUFF*/
+.loginsection{
+    grid-column: 1 / -1;
+    padding: 5% 15%;
+}
+.loginsection h2{
+    text-transform: uppercase;
+}
+.formdefault{
+    display: inline-block;
+    background-color: var(--content-bg-color);
+    border: var(--content-border);
+    width: 96%;
+    margin: 2%;
+    text-align-last: justify;
+    border-radius: 4px; 
+}
+.formdefault label, input, button{
+    font-size: 1.5rem;
+    width: 90%;
+    display: block;
+    padding: 2%;
+    margin: auto;
+    border-radius: 4px;
+}
+.formdefault button{
+    display: inline-block;
+    background-color: rgb(134, 219, 49);
+    width: 50%;
+    margin: 4%;
+    border: 1px solid green;
+    border-radius: 4px;
+    text-align-last: center;
+}
+.formdefault button:hover{
+    cursor: pointer;
+    background-color: rgb(147, 227, 52);
+}
+button#clear{
+    background-color: rgb(240, 46, 12);
+    border: 2px solid rgb(88, 4, 4);
+    width: 30%;
+}
+button#clear:hover{
+    background-color: rgb(245, 65, 24);
+}
+
+/* Media queries */
+
+/* Tablet */
+@media(max-width: 840px) 
+{
+aside{
+    display:none;
+}
+header h1{
+    display: block;
+    width: 100%;
+}
+header, header ul, header li, header a{
+    display: inline-block;
+}
+}
+
+/* Smartphone */
+@media(max-width: 560px) 
+{
+.loginsection{
+     
+    padding: 0;
+ }
+header, header ul, header li, header a{
+    display: block;
+    width: 100%;
+}
+main {
+    text-align: center;
+    padding: 0.5rem;
+}
+aside{
+    display:none;
+}
+main article{
+    width: 100%;
+    height: auto;
+    margin: 0.5rem 0;
+    padding: 0.8rem;
+}
+
+}
