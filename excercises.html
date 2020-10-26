@@ -14,20 +14,25 @@
         <nav>
             <ul>
                 <li><a href="game.html">Boo</a></li>
-                <li><a href="excercises.html">Moo</a></li>
+                <li><a href="excercises.html?#">Moo</a></li>
                 <li><a href="https://wikipedia.com">Goo</a></li>
             </ul>
             <a href="./index.html" id="top-right-link">Home</a>
         </nav>
-    </header> 
+    </header>
 
     <main class="loginsection">
-        <script src="excercises.js"></script>
+        <form action="#" onsubmit="return ChatBot()" class="chatbot">
+            <div id="chat"><p id="chat"></p></div>
+            <input type="text" id="userinput">
+        </form>
     </main>
 
     <footer>
-        <span>&#169; Your Name</span>
+        <span>&#169; Your Name</span> <label id="time-label" class="textboldieblue" style="float:right"></label>
     </footer>
 </body>
+
+<script src="excercises.js"></script>
 
 </html>

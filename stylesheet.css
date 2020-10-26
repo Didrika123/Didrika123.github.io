@@ -200,6 +200,31 @@ button#clear:hover{
     background-color: rgb(245, 65, 24);
 }
 
+/* CHAT BOT */
+.chatbot
+{
+    height: 24em; 
+    border-radius: 8px; 
+    border: 2px solid gray;
+    background: white;
+    display: grid;
+    grid-template-areas: "chat" 
+                        "inputplace";
+    grid-auto-rows: 4fr 1fr;
+    
+}
+.chatbot input{
+    grid-area: "inputplace";
+}
+.chatbot div{
+    
+    grid-area: "chat";
+    display: flex;
+    flex-direction: column;
+    align-content: flex-end;
+    justify-content: flex-end;
+}
+
 /* Media queries */
 
 /* Tablet */

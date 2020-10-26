@@ -49,6 +49,7 @@ let World = {
     update: function () 
     {
         this.img.src = "img\\world.png";
+        //if(cam_x%120)
         screen.context.drawImage(this.img, 0, 0, 192, 32, -cam_x , 0, screen.canvas.width, screen.canvas.height);
         screen.context.drawImage(this.img2, 0, 0, 192, 32, -cam_x , 0, screen.canvas.width, screen.canvas.height);
     }
