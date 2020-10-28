@@ -1,8 +1,8 @@
 
 #map
 {
+    margin: auto;
     display: grid;
-    /*grid-template-columns: 1fr 1fr;*/
     width: min-content;
     border: 4px solid bisque;
     border-radius: 4px;
@@ -13,25 +13,4 @@
     width: 1.5em;
     height: 1.5em;
     image-rendering: crisp-edges;
-}
-
-.floor
-{
-    background-image: url("img/floor.png");
-}
-.wall
-{
-    background-image: url("img/wall.png");
-}
-.box
-{
-    background-image: url("img/box.png");
-}
-.goal
-{
-    background-image: url("img/goal.png");
-}
-.player
-{
-    background-image: url("img/player.png");
 }

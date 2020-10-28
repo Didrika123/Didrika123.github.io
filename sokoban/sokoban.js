@@ -1,122 +1,59 @@
 "use strict";
-
-let keypresses = [];
-class Entity{
-    constructor(id, x, y){
-        this.id = id;
-        this.x = x;
-        this.y = y;
-    }
-}
-let player = new Entity(0, 0,0);
+let imagePaths = { "W": "img/wall.png", " ": "img/floor.png", "B": "img/box.png", "G": "img/goal.png", "P": "img/player.png" };
+let player;
 let numGoals = 0;
-StartGame();
-
-function StartGame()
-{
-    let imagePaths = {"W": "img/wall.png", " ": "img/floor.png", "B": "img/box.png", "G": "img/goal.png", "P": "img/player.png"};
+let tileMap = tileMap02;
+function StartGame() {
     let cols = "";
-    for (let y = 0; y < tileMap01.height; y++) {
-        for (let x = 0; x < tileMap01.width; x++) {
-            if(y == 0)
+    let map = document.getElementById("map");
+    for (let y = 0; y < tileMap.mapGrid.length; y++) {
+        for (let x = 0; x < tileMap.mapGrid[0].length; x++) {
+            if (y == 0)
                 cols += "1fr ";
             let tile = document.createElement("img");
             tile.id = "x" + x + "y" + y;
-            let tileType = tileMap01.mapGrid[y][x][0];
-            tile.setAttribute("src", imagePaths[tileType]);
-            if(tileType == "P")
-                player = new Entity("P", x, y);
-            if(tileType == "G")
+            let tileType = tileMap.mapGrid[y][x][0];
+            tile.src = imagePaths[tileType];
+            if (tileType == "P")
+                player = { x, y };
+            else if (tileType == "G")
                 numGoals++;
-            document.getElementById("map").appendChild(tile)
+            map.appendChild(tile)
         }
     }
-    document.getElementById("map").style = "grid-template-columns: " + cols;
+    map.style = "grid-template-columns: " + cols;
 }
-function Update()
-{
-    if(keypresses["w"] || keypresses["ArrowUp"])
-        Move(0, -1);
-    else if(keypresses["s"] || keypresses["ArrowDown"])
-        Move(0, 1);
-    else if(keypresses["a"] || keypresses["ArrowLeft"])
-        Move(-1, 0);
-    else if(keypresses["d"] || keypresses["ArrowRight"])
-        Move(1, 0);
-}
-function Move(vx, vy, isPlayer = false)
-{
-    let currentTile = document.getElementById("x" + player.x + "y" + player.y );
-    let nextTile = document.getElementById("x" + (player.x + vx)+ "y" + (player.y + vy) );
-    let nextnextTile = document.getElementById("x" + (player.x + vx + vx)+ "y" + (player.y + vy + vy) );
-    let gogo = false;
-
-    let imagePaths = {"W": "img/wall.png", " ": "img/floor.png", "B": "img/box.png", "G": "img/goal.png", "P": "img/player.png"};
-    let imagePathsFloor = {"W": "img/floor.png", " ": "img/floor.png", "B": "img/floor.png", "G": "img/goal.png", "P": "img/floor.png"};
-    
-    
-    if(nextTile.getAttribute("src").includes("wall"))
-    {
-
-    }
-    else if(nextTile.getAttribute("src").includes("goal"))
-    {
-        gogo = true;     
-        nextTile.setAttribute("src", imagePaths["P"])
-        currentTile.setAttribute("src", imagePathsFloor[tileMap01.mapGrid[player.y][player.x][0]]);
-   
-    }
-    else if(nextTile.getAttribute("src").includes("floor"))
-    {
-        gogo = true;
-        nextTile.setAttribute("src", imagePaths["P"])
-        currentTile.setAttribute("src", imagePathsFloor[tileMap01.mapGrid[player.y][player.x][0]]);
-       // Swap(currentTile, nextTile);
-    }
-    else if(nextTile.getAttribute("src").includes("box"))
-    {
-        //Move(vx, vy);
-        if(nextnextTile.getAttribute("src").includes("floor") || nextnextTile.getAttribute("src").includes("goal")){
-            gogo = true;   
-            if(nextnextTile.getAttribute("src").includes("goal"))
-                numGoals--;
-            if(tileMap01.mapGrid[player.y + vy][player.x + vx][0] == "G")
-                numGoals++;
-
-            nextTile.setAttribute("src", imagePaths["P"])
-            nextnextTile.setAttribute("src", imagePaths["B"])
-            currentTile.setAttribute("src", imagePathsFloor[tileMap01.mapGrid[player.y][player.x][0]]);
-            
-            //Swap(nextTile, nextnextTile);
-            //Swap(currentTile, nextTile);
-        }
-        if(numGoals == 0)
+function Move(vx, vy) {
+    let tiles = [document.getElementById("x" + player.x + "y" + player.y), document.getElementById("x" + (player.x + vx) + "y" + (player.y + vy)), document.getElementById("x" + (player.x + vx + vx) + "y" + (player.y + vy + vy))];
+    let tileTypes = [tiles[0].src, tiles[1].src, tiles[2]?.src];
+    let moveIsOk = false;
+    if (tileTypes[1].endsWith(imagePaths["G"]) || tileTypes[1].endsWith(imagePaths[" "])) 
+        moveIsOk = true;
+    else if (tileTypes[1].endsWith(imagePaths["B"]) && (tileTypes[2].endsWith(imagePaths[" "]) || tileTypes[2].endsWith(imagePaths["G"]))) {
+        moveIsOk = true;
+        if (tileTypes[2].endsWith(imagePaths["G"]))
+            numGoals--;
+        if (tileMap.mapGrid[player.y + vy][player.x + vx][0] == "G")
+            numGoals++;
+        tiles[2].src = imagePaths["B"];
+        if (numGoals === 0)
             document.getElementsByTagName("h2")[0].innerText = "YOU WIN!";
-        console.log(numGoals);
     }
-    
-    if(gogo)
-    {
+    if (moveIsOk) {
+        tiles[0].src = tileMap.mapGrid[player.y][player.x][0] === "G"? imagePaths["G"] : imagePaths[" "];
+        tiles[1].src = imagePaths["P"];
         player.x += vx;
         player.y += vy;
     }
 }
-function Reset(tile, x, y){
-    let imagePaths = {"W": "img/wall.png", " ": "img/floor.png", "B": "img/box.png", "G": "img/goal.png", "P": "img/player.png"};
-    tile.setAttribute("src", imagePaths[tileMap01.mapGrid[y][x][0]]);
-}
-function Swap(tile1, tile2)
-{
-    let temp = tile2.getAttribute("src");
-    tile2.setAttribute("src", tile1.getAttribute("src")) ;
-    tile1.setAttribute("src", temp);
-}
 window.addEventListener("keydown", function (event) {
-    keypresses[event.key] = true;
-    Update();
-    event.preventDefault(); //Cancel the default action to avoid it being handled twice
-}, true);
-  window.addEventListener("keyup", function (event) {
-    keypresses[event.key] = false;
-    event.preventDefault(); //Cancel the default action to avoid it being handled twice
+    if (event.key == "w" || event.key == "ArrowUp")
+        Move(0, -1);
+    else if (event.key == "a" || event.key == "ArrowLeft")
+        Move(-1, 0);
+    else if (event.key == "s" || event.key == "ArrowDown")
+        Move(0, 1);
+    else if (event.key == "d" || event.key == "ArrowRight")
+        Move(1, 0);
+    event.preventDefault(); //Cancel default action (aka move page up/down etc)
 }, true);

@@ -57,6 +57,7 @@ header img{
     /*height: 100%; If img outside h1 you need this*/
     vertical-align: middle;
     margin: 0 0.5rem 0 0.5rem;
+    image-rendering: crisp-edges;
 }
 a#top-right-link{
     background:cornflowerblue;
