@@ -2,7 +2,7 @@
 let imagePaths = { "W": "img/wall.png", " ": "img/floor.png", "B": "img/box.png", "G": "img/goal.png", "P": "img/player.png" };
 let player;
 let numGoals;
-let tileMap = tileMap02;
+let tileMap = tileMap01;
 function StartGame() {
     numGoals = 0;
     let map = document.getElementById("map");
@@ -19,7 +19,7 @@ function StartGame() {
             map.appendChild(tile)
         }
     }
-    map.style = "grid-template-columns: repeat(" + tileMap.mapGrid.length +", 1fr)";
+    map.style = "grid-template-columns: repeat(" + tileMap.mapGrid[0].length +", 1fr)";
 }
 function Move(vx, vy) { //Index 0: tile where player stands, Index 1: tile where player want to move, Index 2: Where player wanna move + 1
     let tiles = [document.getElementById("x" + player.x + "y" + player.y), document.getElementById("x" + (player.x + vx) + "y" + (player.y + vy)), document.getElementById("x" + (player.x + vx + vx) + "y" + (player.y + vy + vy))];
