@@ -4,13 +4,10 @@ let player;
 let numGoals;
 let tileMap = tileMap02;
 function StartGame() {
-    let cols = "";
     numGoals = 0;
     let map = document.getElementById("map");
     for (let y = 0; y < tileMap.mapGrid.length; y++) {
         for (let x = 0; x < tileMap.mapGrid[0].length; x++) {
-            if (y == 0)
-                cols += "1fr ";
             let tile = document.createElement("img");
             tile.id = "x" + x + "y" + y;
             let tileType = tileMap.mapGrid[y][x][0];
@@ -22,7 +19,7 @@ function StartGame() {
             map.appendChild(tile)
         }
     }
-    map.style = "grid-template-columns: " + cols;
+    map.style = "grid-template-columns: repeat(" + tileMap.mapGrid.length +", 1fr)";
 }
 function Move(vx, vy) { //Index 0: tile where player stands, Index 1: tile where player want to move, Index 2: Where player wanna move + 1
     let tiles = [document.getElementById("x" + player.x + "y" + player.y), document.getElementById("x" + (player.x + vx) + "y" + (player.y + vy)), document.getElementById("x" + (player.x + vx + vx) + "y" + (player.y + vy + vy))];
